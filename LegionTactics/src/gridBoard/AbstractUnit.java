@@ -21,7 +21,8 @@ public abstract class AbstractUnit {
 	 * @return - the unit that was previously occupying the square
 	 */
 	public AbstractUnit moveToSquare(Square destination){
-		this.square.removeUnit();
+		if(this.square != null)
+			this.square.removeUnit();
 		return destination.setUnit(this);
 	}
 	
