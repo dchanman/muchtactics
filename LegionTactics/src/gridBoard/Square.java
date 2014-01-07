@@ -8,6 +8,7 @@ package gridBoard;
  * have a single Square with that row/column value. Squares are only constructed 
  * by a Board.
  * @author Derek Chan
+ * @version 1.0
  */
 public class Square {
 	
@@ -90,7 +91,9 @@ public class Square {
 	
 	@Override
 	public boolean equals(Object o){
-		return (this == o);
+		if(o instanceof Square == false) return false;
+		Square s = ((Square)o);
+		return (this.row == s.row && this.col == s.col);
 	}
 	
 	@Override

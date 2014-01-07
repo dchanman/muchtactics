@@ -6,6 +6,14 @@ import gridBoard.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests the functionality of the SquareSet
+ * to ensure that all elements are unique and
+ * non-null.
+ * @author Derek Chan
+ * @version 1.0
+ *
+ */
 public class SquareSetTest {
 	
 	SquareSet set;

@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * Path class creates a queue of Squares that a unit may iterate through
  * to reach a destination. The path will contain its starting square.
  * @author Derek Chan
+ * @version 1.0
  */
 public class Path {
 	

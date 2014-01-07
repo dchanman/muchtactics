@@ -1,6 +1,7 @@
 package lt.units;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,8 +10,14 @@ import java.util.Random;
 import gridBoard.AbstractUnit;
 import gridBoard.Board;
 import gridBoard.Square;
-import gridBoard.SquareSet;
 
+/**
+ * Unit class intended for the Legion Tactics game. All units will
+ * be subclassed from this abstract class, and this class will provide
+ * all basic functionality for the units.
+ * @author Derek Chan
+ * @version 1.0
+ */
 public abstract class Unit extends AbstractUnit{
 
 	/**
@@ -189,21 +196,27 @@ public abstract class Unit extends AbstractUnit{
 		while(queue.isEmpty() == false){
 			Square current = queue.remove(0);
 			if (current == null) continue;
-			if (((Unit)current.getUnit()) != null && ((Unit)current.getUnit()).team != this.team) continue;
-			current_path = map.get(current);
-			if (current_path == null || current_path.length() > this.movement) {
-				continue;
+			
+			U = (Unit) current.getUnit();
+			
+			if (U != null){
+				if (U.team != this.team) continue;
+				else if (U.is_static) continue;
+				else if(U.team != this.team) continue;
 			}
+			
+			
+			current_path = map.get(current);
 			current_path.add(current);
 
 			if (current_path.length() > this.movement) continue;
-			U = (Unit) current.getUnit();
+			
+			/*
 			if (U != null) {
 				if (U.team != this.team)
 					continue;
-				if (U.is_static == true)
-					continue;
 			}
+			*/
 			map.put(this.board.getAdjacentSquare(Board.SQUARE_TO_UP, current),
 					new Path(current_path));
 			map.put(this.board.getAdjacentSquare(Board.SQUARE_TO_DOWN, current),
@@ -214,7 +227,8 @@ public abstract class Unit extends AbstractUnit{
 					.getAdjacentSquare(Board.SQUARE_TO_RIGHT, current),
 					new Path(current_path));
 
-			queue.add(this.board.getAdjacentSquare(Board.SQUARE_TO_UP, current));
+			queue.add(this.board.getAdjacentSquare(Board.SQUARE_TO_UP, 
+					current));
 			queue.add(this.board.getAdjacentSquare(Board.SQUARE_TO_DOWN,
 					current));
 			queue.add(this.board.getAdjacentSquare(Board.SQUARE_TO_LEFT,
@@ -224,7 +238,15 @@ public abstract class Unit extends AbstractUnit{
 
 		}
 		
-		return map.getAllPaths();
+		Collection<Path> paths = map.getAllPaths();
+		List<Path> toReturn = new ArrayList<Path>();
+		for(Path P: paths){
+			if(P.destination().isEmpty()){
+				toReturn.add(P);
+			}				
+		}
+		
+		return toReturn;
 		
 	}
 	
@@ -245,6 +267,15 @@ public abstract class Unit extends AbstractUnit{
 		
 		HashMap<Square, Path> map = new HashMap<Square, Path>();
 		
+		/**
+		 * If this PathMapTable already contains a Path for the Square key,
+		 * then no values are changed and instead this method will return
+		 * the preexisting path.
+		 * @param key - the Square as a key in the pair
+		 * @param value - the Path as a value in the pair
+		 * @return - the preexisting path for this Square key, or null if there was no
+		 * previous path.
+		 */
 		public Path put(Square key, Path value){
 			if(key == null){
 				return null;
@@ -257,29 +288,41 @@ public abstract class Unit extends AbstractUnit{
 			}
 		}
 		
+		/**
+		 * Gets the Path associated with this Square as a destination
+		 * @param key - the destination square
+		 * @return  the path that ends on this Square in the map
+		 */
 		public Path get(Square key){
 			return map.get(key);
 		}
 		
+		/**
+		 * Removes the Path that is associated with this Square
+		 * @param key - the Square that the Path ends on
+		 * @return the Path that was previously associated with the Square key
+		 */
 		public Path remove(Square key){
 			if (key == null) return null;
 			return map.remove(key);
 		}
 		
 		/**
-		 * Produces a list of Paths that are not already occupied by another unit.
+		 * Produces a list of Paths contained by this PathMapTable
 		 * @return - a list of Paths
 		 */
-		public List<Path> getAllPaths(){
+		public Collection<Path> getAllPaths(){
 			ArrayList<Path> paths = new ArrayList<Path>();
+			Path P;
 			for(Square key: map.keySet()){
-				if(key.isEmpty()){
-					paths.add(map.get(key));
-				}
-					
+					P = map.get(key);
+					P.add(key);
+					paths.add(P);					
 			}
 			return paths;
+			
 		}
+		
 	}
 
 }

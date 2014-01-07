@@ -7,6 +7,14 @@ import org.junit.Test;
 
 import gridBoard.*;
 
+/**
+ * Test the AbstractUnit class and its basic functionality
+ * such as placing units, moving units, getting adjacent Squares
+ * and finding basic legal moves.
+ * @author Derek Chan
+ * @version 1.0
+ *
+ */
 public class AbstractUnitTest {
 	
 	Board b;

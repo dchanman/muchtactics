@@ -5,6 +5,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * A set of Squares with basic getters and setters
+ * to ensure that the Squares contained in a list
+ * within this object are all non-null and unique.
+ * @author Derek Chan
+ * @version 1.0
+ *
+ */
 public class SquareSet implements Set<Square>{
 	
 	private ArrayList<Square> set;

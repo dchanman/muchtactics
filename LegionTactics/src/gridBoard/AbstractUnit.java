@@ -1,5 +1,12 @@
 package gridBoard;
 
+/**
+ * Abstract Unit to be a superclass for any other
+ * piece or unit to be used with a Board.
+ * @author Derek Chan
+ * @version 1.0
+ *
+ */
 public abstract class AbstractUnit {
 	
 	/**

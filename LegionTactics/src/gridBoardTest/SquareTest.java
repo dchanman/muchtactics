@@ -6,6 +6,13 @@ import gridBoard.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests the Square class to ensure equality
+ * between two squares works.
+ * @author Derek Chan
+ * @version 1.0
+ *
+ */
 public class SquareTest {
 	
 	Board b;

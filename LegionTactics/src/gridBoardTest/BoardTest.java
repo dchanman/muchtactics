@@ -7,6 +7,15 @@ import org.junit.Test;
 
 import gridBoard.*;
 
+/**
+ * Test cases for the Board class, checks that
+ * the Square getters are correctly returning legal
+ * and illegal squares, and that Adjacent squares and files
+ * are received properly. 
+ * @author Derek Chan
+ * @version 1.0
+ *
+ */
 public class BoardTest {
 	
 	Board B;

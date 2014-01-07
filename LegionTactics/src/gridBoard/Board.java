@@ -2,6 +2,14 @@ package gridBoard;
 
 import java.util.ArrayList;
 
+/**
+ * Board object which will contain all the Squares
+ * and Units that will be used in a game. Also provides
+ * basic directional and relative Square methods that
+ * can be used.
+ * @author Derek Chan
+ * @version 1.0
+ */
 public class Board {
 	
 	/**

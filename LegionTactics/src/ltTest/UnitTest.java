@@ -15,6 +15,12 @@ import gridBoard.SquareSet;
 import lt.units.Path;
 import lt.units.Unit;
 
+/**
+ * Test the Unit class for Legion Tactics
+ * @author Derek
+ * @version 1.0
+ *
+ */
 public class UnitTest {
 	
 	Board b;
@@ -378,44 +384,170 @@ public class UnitTest {
 				ArrayList<Square> destinations = new ArrayList<Square>();
 				for(Path p: paths){
 					destinations.add(p.destination());
-					//System.out.println(p.destination().toString());
 				}		
-				
-				
 				
 				assertTrue(destinations.contains(b.getSquare(0, 3)));
 				assertTrue(destinations.contains(b.getSquare(1, 3)));
 				assertTrue(destinations.contains(b.getSquare(2, 3)));
 				assertFalse(destinations.contains(b.getSquare(3, 3))); //this square is occupied by itself
 				assertTrue(destinations.contains(b.getSquare(4, 3)));
-				assertFalse(destinations.contains(b.getSquare(5, 3)));
-				assertFalse(destinations.contains(b.getSquare(6, 3)));
+				assertFalse(destinations.contains(b.getSquare(5, 3)));	//occupied by an enemy unit
+				assertFalse(destinations.contains(b.getSquare(6, 3)));	//blocked by the above unit
 				
 				assertTrue(destinations.contains(b.getSquare(1, 2)));
 				assertTrue(destinations.contains(b.getSquare(2, 2)));
-				assertFalse(destinations.contains(b.getSquare(3, 2)));
+				assertFalse(destinations.contains(b.getSquare(3, 2)));	//occupied by a friendly unit
 				assertTrue(destinations.contains(b.getSquare(4, 2)));
 				assertTrue(destinations.contains(b.getSquare(5, 2)));
 				
 				assertTrue(destinations.contains(b.getSquare(1, 4)));
-				assertFalse(destinations.contains(b.getSquare(2, 4)));
+				assertFalse(destinations.contains(b.getSquare(2, 4)));	//occupied by enemy unit
 				assertTrue(destinations.contains(b.getSquare(3, 4)));
 				assertTrue(destinations.contains(b.getSquare(4, 4)));
 				assertTrue(destinations.contains(b.getSquare(5, 4)));
 				
 				assertTrue(destinations.contains(b.getSquare(2, 1)));
-				assertFalse(destinations.contains(b.getSquare(3, 1)));
+				assertFalse(destinations.contains(b.getSquare(3, 1)));	//blocked by friendly unit at 3,2
 				assertTrue(destinations.contains(b.getSquare(4, 1)));
 				
 				assertTrue(destinations.contains(b.getSquare(2, 5)));
 				assertTrue(destinations.contains(b.getSquare(3, 5)));
 				assertTrue(destinations.contains(b.getSquare(4, 5)));
 				
-				assertFalse(destinations.contains(b.getSquare(3, 0)));
+				assertFalse(destinations.contains(b.getSquare(3, 0)));	//blocked by friendly unit at 3,2
 				
-				assertFalse(destinations.contains(b.getSquare(3, 6)));
+				assertFalse(destinations.contains(b.getSquare(3, 6)));	//occupied by friendly unit
 				
 				assertEquals(17, destinations.size());
+	}
+	
+	@Test
+	public void testPathingWithAdjacentUnits(){
+		//we'll need a bigger board
+		b = new Board(7,7);
+		
+		TestUnit main_character = new TestUnit(b, Unit.TEAM_ONE);
+		main_character.setStatic(false);
+		main_character.setMovement(3);
+		TestUnit a_friend = new TestUnit(b, Unit.TEAM_ONE);
+		a_friend.setStatic(false);
+		TestUnit a_friend2 = new TestUnit(b, Unit.TEAM_ONE);
+		a_friend2.setStatic(false);
+		TestUnit a_friend3 = new TestUnit(b, Unit.TEAM_ONE);
+		a_friend3.setStatic(false);
+		TestUnit a_friend4 = new TestUnit(b, Unit.TEAM_ONE);
+		a_friend4.setStatic(false);
+		TestUnit a_friendly_building = new TestUnit(b, Unit.TEAM_ONE);
+		a_friendly_building.setStatic(true);
+		TestUnit a_friendly_building2 = new TestUnit(b, Unit.TEAM_ONE);
+		a_friendly_building2.setStatic(true);
+		TestUnit a_friendly_building3 = new TestUnit(b, Unit.TEAM_ONE);
+		a_friendly_building3.setStatic(true);
+		TestUnit a_friendly_building4 = new TestUnit(b, Unit.TEAM_ONE);
+		a_friendly_building4.setStatic(true);
+
+		
+		main_character.moveToSquare(b.getSquare(3, 3));
+		a_friend.moveToSquare(b.getSquare(3, 2));
+		a_friend2.moveToSquare(b.getSquare(3, 1));	//standing behind another unit
+		a_friend3.moveToSquare(b.getSquare(5, 3)); //standing behind a static unit
+		a_friend4.moveToSquare(b.getSquare(3, 4)); //standing in front of a static unit
+		a_friendly_building.moveToSquare(b.getSquare(3,5));
+		a_friendly_building2.moveToSquare(b.getSquare(4,3));
+		a_friendly_building3.moveToSquare(b.getSquare(2,3));
+		a_friendly_building4.moveToSquare(b.getSquare(1,3));
+		ArrayList<Path> paths = new ArrayList<Path>(main_character.getLegalPaths());
+		ArrayList<Square> destinations = new ArrayList<Square>();
+		for(Path p: paths){
+			destinations.add(p.destination());
+			//System.out.println(p.destination().toString());
+			
+		}	
+		//printRepeatedSquares(destinations);
+		
+		
+		
+		assertFalse(destinations.contains(b.getSquare(0, 3)));
+		assertFalse(destinations.contains(b.getSquare(1, 3)));
+		assertFalse(destinations.contains(b.getSquare(2, 3)));
+		assertFalse(destinations.contains(b.getSquare(3, 3))); //this square is occupied by itself
+		assertFalse(destinations.contains(b.getSquare(4, 3)));
+		assertFalse(destinations.contains(b.getSquare(5, 3)));
+		assertFalse(destinations.contains(b.getSquare(6, 3)));
+		
+		assertTrue(destinations.contains(b.getSquare(1, 2)));
+		assertTrue(destinations.contains(b.getSquare(2, 2)));
+		assertFalse(destinations.contains(b.getSquare(3, 2)));
+		assertTrue(destinations.contains(b.getSquare(4, 2)));
+		assertTrue(destinations.contains(b.getSquare(5, 2)));
+		
+		assertTrue(destinations.contains(b.getSquare(1, 4)));
+		assertTrue(destinations.contains(b.getSquare(2, 4)));
+		assertFalse(destinations.contains(b.getSquare(3, 4)));
+		assertTrue(destinations.contains(b.getSquare(4, 4)));
+		assertTrue(destinations.contains(b.getSquare(5, 4)));
+		
+		assertTrue(destinations.contains(b.getSquare(2, 1)));
+		assertFalse(destinations.contains(b.getSquare(3, 1)));
+		assertTrue(destinations.contains(b.getSquare(4, 1)));
+		
+		assertTrue(destinations.contains(b.getSquare(2, 5)));
+		assertFalse(destinations.contains(b.getSquare(3, 5)));
+		assertTrue(destinations.contains(b.getSquare(4, 5)));
+		
+		assertTrue(destinations.contains(b.getSquare(3, 0)));
+		
+		assertFalse(destinations.contains(b.getSquare(3, 6)));
+		
+		assertEquals(13, destinations.size());
+		
+	}
+		
+	@Test
+	public void testPathingWithAdjacentEnemyUnits(){
+		//we'll need a bigger board
+		b = new Board(7,7);
+		
+		TestUnit main_character = new TestUnit(b, Unit.TEAM_ONE);
+		main_character.setStatic(false);
+		main_character.setMovement(3);
+		TestUnit an_enemy = new TestUnit(b, Unit.TEAM_TWO);
+		an_enemy.setStatic(false);
+		TestUnit an_enemy2 = new TestUnit(b, Unit.TEAM_TWO);
+		an_enemy2.setStatic(false);
+		TestUnit an_enemy3 = new TestUnit(b, Unit.TEAM_TWO);
+		an_enemy3.setStatic(false);
+		TestUnit an_enemy4 = new TestUnit(b, Unit.TEAM_TWO);
+		an_enemy4.setStatic(false);
+		TestUnit an_enemy_building = new TestUnit(b, Unit.TEAM_TWO);
+		an_enemy_building.setStatic(true);
+		TestUnit an_enemy_building2 = new TestUnit(b, Unit.TEAM_TWO);
+		an_enemy_building2.setStatic(true);
+		TestUnit an_enemy_building3 = new TestUnit(b, Unit.TEAM_TWO);
+		an_enemy_building3.setStatic(true);
+		TestUnit an_enemy_building4 = new TestUnit(b, Unit.TEAM_TWO);
+		an_enemy_building4.setStatic(true);
+
+		
+		main_character.moveToSquare(b.getSquare(3, 3));
+		an_enemy.moveToSquare(b.getSquare(3, 2));
+		an_enemy2.moveToSquare(b.getSquare(3, 1));	//standing behind another unit
+		an_enemy3.moveToSquare(b.getSquare(5, 3)); //standing behind a static unit
+		an_enemy4.moveToSquare(b.getSquare(3, 4)); //standing in front of a static unit
+		an_enemy_building.moveToSquare(b.getSquare(3,5));
+		an_enemy_building2.moveToSquare(b.getSquare(4,3));
+		an_enemy_building3.moveToSquare(b.getSquare(2,3));
+		an_enemy_building4.moveToSquare(b.getSquare(1,3));
+		ArrayList<Path> paths = new ArrayList<Path>(main_character.getLegalPaths());
+		ArrayList<Square> destinations = new ArrayList<Square>();
+		for(Path p: paths){
+			destinations.add(p.destination());
+			//System.out.println(p.destination().toString());
+			
+		}	
+		//printRepeatedSquares(destinations);
+		
+		assertEquals(0, destinations.size());
 	}
 	
 	//@Test
@@ -456,6 +588,30 @@ public class UnitTest {
 		}
 		
 		System.out.println();
+	}
+	
+	/**
+	 * Helper test function which will print to the console the
+	 * coordinates of any squares that are repeated in an ArrayList
+	 * @param squares - the list to be analyzed
+	 */
+	private void printRepeatedSquares(ArrayList<Square> squares){
+		ArrayList<Square> repeats = new ArrayList<Square>();
+		for(int k = 0; k < squares.size(); k++){
+			for(int j = k+1; j < squares.size(); j++){
+				//System.out.println("Comparing " + squares.get(k) + " with " + squares.get(j) + "...");
+				if (squares.get(k).equals(squares.get(j))){
+					//System.out.println("MATCH!");
+					repeats.add(squares.get(k));
+				}
+			}
+		}
+		
+		System.out.println("The following are repeated squares: {");
+		for(Square s: repeats){
+			System.out.println(s);
+		}
+		System.out.println("}");
 	}
 	
 	private class TestUnit extends Unit {
